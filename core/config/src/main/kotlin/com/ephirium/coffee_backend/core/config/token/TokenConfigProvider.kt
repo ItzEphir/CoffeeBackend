@@ -2,11 +2,12 @@ package com.ephirium.coffee_backend.core.config.token
 
 import com.ephirium.coffee_backend.core.config.ConfigAlreadyDefinedException
 import com.ephirium.coffee_backend.core.config.UndefinedApplicationConfigException
-import com.ephirium.coffee_backend.core.config.token.jwtFields.ACCESS_EXPIRATION
-import com.ephirium.coffee_backend.core.config.token.jwtFields.AUDIENCE
-import com.ephirium.coffee_backend.core.config.token.jwtFields.DOMAIN
-import com.ephirium.coffee_backend.core.config.token.jwtFields.REFRESH_EXPIRATION
-import com.ephirium.coffee_backend.core.config.token.jwtFields.SECRET
+import com.ephirium.coffee_backend.core.config.token.JWTFields.ACCESS_EXPIRATION
+import com.ephirium.coffee_backend.core.config.token.JWTFields.AUDIENCE
+import com.ephirium.coffee_backend.core.config.token.JWTFields.DOMAIN
+import com.ephirium.coffee_backend.core.config.token.JWTFields.REALM
+import com.ephirium.coffee_backend.core.config.token.JWTFields.REFRESH_EXPIRATION
+import com.ephirium.coffee_backend.core.config.token.JWTFields.SECRET
 import io.ktor.server.application.*
 import io.ktor.server.config.*
 import kotlin.time.Duration.Companion.days
@@ -14,10 +15,11 @@ import kotlin.time.Duration.Companion.days
 private var config: TokenConfig? = null
 val tokenConfig by lazy { config ?: throw UndefinedTokenConfigException() }
 
-private object jwtFields {
+private object JWTFields {
     const val DOMAIN = "jwt.domain"
     const val AUDIENCE = "jwt.audience"
     const val SECRET = "jwt.secret"
+    const val REALM = "jwt.realm"
     const val ACCESS_EXPIRATION = "jwt.expirationTimesDays.access"
     const val REFRESH_EXPIRATION = "jwt.expirationTimesDays.refresh"
 }
@@ -32,6 +34,7 @@ fun ApplicationConfig.initTokenConfig() {
         issuer = tryGetString(DOMAIN) ?: throw UndefinedApplicationConfigException(DOMAIN),
         audience = tryGetString(AUDIENCE) ?: throw UndefinedApplicationConfigException(AUDIENCE),
         secret = tryGetString(SECRET) ?: throw UndefinedApplicationConfigException(SECRET),
+        realm = tryGetString(REALM) ?: throw UndefinedApplicationConfigException(REALM),
         expirationTimes = TokenConfig.TokenExpirationTimes(
             accessToken = runCatching { property(ACCESS_EXPIRATION).getInt().days }
                 .getOrElse { throw UndefinedApplicationConfigException(ACCESS_EXPIRATION) },

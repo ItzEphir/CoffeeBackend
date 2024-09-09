@@ -6,6 +6,7 @@ data class TokenConfig(
     val issuer: String,
     val audience: String,
     val secret: String,
+    val realm: String,
     val expirationTimes: TokenExpirationTimes,
 ) {
     data class TokenExpirationTimes(
