@@ -1,0 +1,1 @@
+inline fun <reified T> T.alsolog(message: String): T = also { println("$message $it") }
