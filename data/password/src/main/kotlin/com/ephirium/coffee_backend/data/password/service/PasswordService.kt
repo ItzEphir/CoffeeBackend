@@ -1,6 +1,5 @@
 package com.ephirium.coffee_backend.data.password.service
 
-import com.ephirium.coffee_backend.core.hashing.model.SaltedHash
 import com.ephirium.coffee_backend.data.password.model.entity.Password
 
 interface PasswordService {

@@ -1,7 +1,6 @@
 package com.ephirium.coffee_backend.data.password.service
 
 import alsolog
-import com.ephirium.coffee_backend.core.hashing.model.SaltedHash
 import com.ephirium.coffee_backend.data.password.mapper.toDto
 import com.ephirium.coffee_backend.data.password.mapper.toPassword
 import com.ephirium.coffee_backend.data.password.model.dto.PasswordDto

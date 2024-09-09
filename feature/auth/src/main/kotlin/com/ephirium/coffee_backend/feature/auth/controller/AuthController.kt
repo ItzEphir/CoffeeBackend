@@ -1,6 +1,5 @@
 package com.ephirium.coffee_backend.feature.auth.controller
 
-import alsolog
 import com.ephirium.coffee_backend.core.hashing.service.HashingService
 import com.ephirium.coffee_backend.core.token.model.TokenClaim
 import com.ephirium.coffee_backend.core.token.model.Tokens
