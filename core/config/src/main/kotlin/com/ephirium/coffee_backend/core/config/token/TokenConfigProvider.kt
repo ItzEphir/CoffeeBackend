@@ -2,12 +2,12 @@ package com.ephirium.coffee_backend.core.config.token
 
 import com.ephirium.coffee_backend.core.config.ConfigAlreadyDefinedException
 import com.ephirium.coffee_backend.core.config.UndefinedApplicationConfigException
-import com.ephirium.coffee_backend.core.config.token.JWTFields.ACCESS_EXPIRATION
-import com.ephirium.coffee_backend.core.config.token.JWTFields.AUDIENCE
-import com.ephirium.coffee_backend.core.config.token.JWTFields.DOMAIN
-import com.ephirium.coffee_backend.core.config.token.JWTFields.REALM
-import com.ephirium.coffee_backend.core.config.token.JWTFields.REFRESH_EXPIRATION
-import com.ephirium.coffee_backend.core.config.token.JWTFields.SECRET
+import com.ephirium.coffee_backend.core.config.token.JwtFields.ACCESS_EXPIRATION
+import com.ephirium.coffee_backend.core.config.token.JwtFields.AUDIENCE
+import com.ephirium.coffee_backend.core.config.token.JwtFields.DOMAIN
+import com.ephirium.coffee_backend.core.config.token.JwtFields.REALM
+import com.ephirium.coffee_backend.core.config.token.JwtFields.REFRESH_EXPIRATION
+import com.ephirium.coffee_backend.core.config.token.JwtFields.SECRET
 import io.ktor.server.application.*
 import io.ktor.server.config.*
 import kotlin.time.Duration.Companion.days
@@ -15,7 +15,7 @@ import kotlin.time.Duration.Companion.days
 private var config: TokenConfig? = null
 val tokenConfig by lazy { config ?: throw UndefinedTokenConfigException() }
 
-private object JWTFields {
+private object JwtFields {
     const val DOMAIN = "jwt.domain"
     const val AUDIENCE = "jwt.audience"
     const val SECRET = "jwt.secret"
