@@ -24,6 +24,9 @@ dependencies {
     implementation(projects.data.password)
 
     implementation(libs.kotlinx.serialization.core)
+    implementation(libs.kotlinx.datetime)
     implementation(libs.ktor.server.core)
+    implementation(libs.ktor.server.auth)
+    implementation(libs.ktor.server.auth.jwt)
     implementation(libs.koin.core)
 }

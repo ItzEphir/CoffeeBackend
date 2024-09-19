@@ -23,4 +23,8 @@ internal class JWTTokenService(private val tokenConfig: TokenConfig) : TokenServ
             .run { claims.fold(initial = this) { acc, it -> acc.withClaim(it.name, it.value) } }
             .sign(Algorithm.HMAC256(tokenConfig.secret))
             .alsolog("Generated:")
+
+    override fun decode(token: String): List<TokenClaim> = JWT.decode(token).claims.map {
+        TokenClaim(it.key, it.value.toString())
+    }
 }

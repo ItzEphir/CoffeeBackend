@@ -18,39 +18,41 @@ internal class MongoUserService(database: MongoDatabase) : UserService {
 
     private val collection = database.getCollection<UserDto>(COLLECTION)
 
-    override suspend fun create(user: User): CreatedId? = withContext(Dispatchers.IO) {
-        runCatching { collection.createIndex(Indexes.text(UserDto::login::name.name), IndexOptions().unique(true)) }
+    override suspend fun create(user: User): String? = withContext(Dispatchers.IO) {
+        runCatching { collection.createIndex(Indexes.text(UserDto::login.name), IndexOptions().unique(true)) }
             .getOrElse { return@withContext null }
             .alsolog("Created index:")
 
-        collection.insertOne(user.toDto()).insertedId?.asObjectId()?.value?.toHexString()
-            ?.alsolog("Created id:")
+        runCatching {
+            collection.insertOne(user.toDto()).insertedId?.asObjectId()?.value?.toHexString()
+                ?.alsolog("Created id:")
+        }.getOrElse { return@withContext null }
     }
 
-    override suspend fun read(id: String): FoundUserDto? = withContext(Dispatchers.IO) {
+    override suspend fun read(id: String): User? = withContext(Dispatchers.IO) {
         collection.find(Filters.eq(ID, ObjectId(id))).firstOrNull()?.toUser()
             ?.alsolog("Read:")
     }
 
-    override suspend fun update(user: User): ReplacedUserDto? = withContext(Dispatchers.IO) {
+    override suspend fun update(user: User): User? = withContext(Dispatchers.IO) {
         val userDto = user.toDto()
         collection.findOneAndReplace(Filters.eq(ID, userDto.id), userDto)?.toUser()
             ?.alsolog("Updated:")
     }
 
-    override suspend fun delete(id: String): DeletedLogin? = withContext(Dispatchers.IO) {
+    override suspend fun delete(id: String): String? = withContext(Dispatchers.IO) {
         collection.findOneAndDelete(Filters.eq(ID, ObjectId(id)))?.login
             ?.alsolog("Deleted login:")
     }
 
-    override suspend fun findByLogin(login: String): FoundUserDto? = withContext(Dispatchers.IO) {
+    override suspend fun findByLogin(login: String): User? = withContext(Dispatchers.IO) {
         collection.find(Filters.eq(UserDto::login.name, login)).firstOrNull()?.toUser()
             ?.alsolog("Read:")
     }
 
-    override suspend fun deleteByLogin(login: String): DeletedLogin? = withContext(Dispatchers.IO) {
-        collection.findOneAndDelete(Filters.eq(UserDto::login.name))?.login
-            ?.alsolog("Deleted login:")
+    override suspend fun deleteByLogin(login: String): String? = withContext(Dispatchers.IO) {
+        collection.findOneAndDelete(Filters.eq(UserDto::login.name))?.id?.toHexString()
+            ?.alsolog("Deleted id:")
     }
 
     private companion object {
