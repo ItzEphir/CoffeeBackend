@@ -32,7 +32,7 @@ class AuthController(
         val passwordSaltedHash = passwordService
             .findPasswordSaltedHashByLogin(login)
             ?: return@withContext Result.failure(AuthExceptions.UserNotFound())
-        actionToResult<Unit, AuthExceptions.HashingValidation>(exceptionClass = AuthExceptions.HashingValidation::class) {
+        actionToResult(exceptionClass = AuthExceptions.HashingValidation::class) {
             if (hashingService.verify(password, passwordSaltedHash)) Unit else null
         }.map {
             userService.findByLogin(login) ?: return@withContext Result.failure(AuthExceptions.UserNotFound())
